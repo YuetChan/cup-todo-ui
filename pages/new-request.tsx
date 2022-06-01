@@ -1,8 +1,8 @@
 
 import { useEffect, useState } from "react";
-import { Button, TextareaAutosize } from "@mui/material";
-
 import { useRouter } from "next/router";
+
+import { Button, TextareaAutosize } from "@mui/material";
 
 import NavBar from "../components/nav-bar";
 
@@ -10,7 +10,9 @@ import { getSessionUserEmail, getUserByEmail } from "../util/user-util";
 import { isJwtEmptyOrInvalid } from "../util/jwt-util";
 import { submitRequest } from "../util/request-report-util";
 
-const NewRequest = () => { 
+const NewRequest = (props: any) => { 
+  console.log('NewRequest', 'props', props);
+
   const router = useRouter();
 
   const [ srcOfIncome, setSrcOfIncome ] = useState('');
@@ -18,24 +20,13 @@ const NewRequest = () => {
   const [ physique, setPhysique ] = useState('');
   const [ bonus, setBonus ] = useState('');
 
-  const handleSrcOfIncomeTextareaChange = (e) => {
-    setSrcOfIncome(e.target.value);
-  }
-
-  const handleSkillSetTextareaChange = (e) => {
-    setSkillSet(e.target.value);
-  }
-
-  const handlePhysiqueTextareaChange = (e) => {
-    setPhysique(e.target.value);
-  }
-
-  const handleBonusTextareaChange = (e) => {
-    setBonus(e.target.value);
-  }
+  const handleSrcOfIncomeTextareaChange = (e) => { setSrcOfIncome(e.target.value); }
+  const handleSkillSetTextareaChange = (e) => { setSkillSet(e.target.value); }
+  const handlePhysiqueTextareaChange = (e) => { setPhysique(e.target.value); }
+  const handleBonusTextareaChange = (e) => { setBonus(e.target.value); }
 
   const handleSubmitClick = () => {
-    console.log('submit called')
+    console.log('handleSubmitClick');
 
     const json = JSON.stringify({
       data: {
@@ -70,19 +61,10 @@ const NewRequest = () => {
   }, []);
 
   const _srcOfIncome = (
-    <div style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-
-      margin: "37px 0px 0px 0px"
-    }}>
+    <div className="new-request__question">
       <div><b>Source of Income</b></div>
 
-      <div style={{ 
-        display: "flex", 
-        margin: "11px 0px 0px 0px"
-      }}>
+      <div className="new-request__answer">
         <TextareaAutosize
           aria-label="Source of income"
           minRows={ 7 }
@@ -97,19 +79,10 @@ const NewRequest = () => {
   )
 
   const _skillSet = (
-    <div style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-
-      margin: "37px 0px 0px 0px"
-    }}>
+    <div className="new-request__question">
       <div><b>Skill Set</b></div>
 
-      <div style={{ 
-        display: "flex", 
-        margin: "11px 0px 0px 0px"
-      }}>
+      <div className="new-request__answer">
         <TextareaAutosize
           aria-label="Skill set"
           minRows={ 7 }
@@ -124,19 +97,10 @@ const NewRequest = () => {
   )
 
   const _physique = (
-    <div style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-
-      margin: "37px 0px 0px 0px"
-    }}>
+    <div className="new-request__question">
       <div><b>Physique</b></div>
 
-      <div style={{ 
-        display: "flex", 
-        margin: "11px 0px 0px 0px"
-      }}>
+      <div className="new-request__answer">
         <TextareaAutosize
           aria-label="Physique"
           minRows={ 7 }
@@ -151,19 +115,10 @@ const NewRequest = () => {
   )
 
   const _bonus = (
-    <div style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-
-      margin: "37px 0px 0px 0px"
-    }}>
+    <div className="new-request__question">
       <div><b>Achievement</b></div>
 
-      <div style={{ 
-        display: "flex", 
-        margin: "11px 0px 0px 0px"
-      }}>
+      <div className="new-request__answer">
         <TextareaAutosize
           aria-label="Achievement"
           minRows={ 7 }
@@ -192,35 +147,17 @@ const NewRequest = () => {
   )
 
   return (
-    <div>
+    <div className="new-request">
       <NavBar />
-      <div style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
 
-        padding: "74px 0px 37px 0px",
-
-        fontSize: "19px",
-        color: "#0B214A"
-      }}>
-        <div style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}>
+      <div className="new-request__content">
+        <div className="new-request__note">
           <div><b>Note</b></div>
         
-          <div style={{
-            margin: "11px 0px 0px 0px",
-            fontSize: "16px",
-          }}>
-            <div>
-              ◾️ Please fill out all four questions.
-            </div>
-            <div>
-              ◾️ Please utilize BULLET POINTS for accurate estimation.
-            </div>
+          <div className="new-request__note__content">
+            <div>◾️ Please fill out all FOUR questions.</div>
+
+            <div> ◾️ Please utilize BULLET POINTS for accurate estimation.</div>
           </div>
         </div>
 
@@ -228,6 +165,7 @@ const NewRequest = () => {
         {_skillSet}
         {_physique}
         {_bonus}
+        
         {submitBtn}
       </div>
     </div>

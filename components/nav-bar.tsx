@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 import { Menu, MenuItem } from "@mui/material";
 
-import GTranslateIcon from '@mui/icons-material/GTranslate';
+import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import LoginIcon from '@mui/icons-material/Login';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
@@ -11,33 +12,25 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-import { useRouter } from "next/router";
 import { getSessionUserEmail } from "../util/user-util";
 import { isJwtEmptyOrInvalid } from "../util/jwt-util";
 
  const NavBar = (props: any) => {
-  const [email, setEmail] = useState('');
-
-  useEffect(() => {
-    if(!isJwtEmptyOrInvalid()){
-      setEmail(getSessionUserEmail());
-    }
-  }, []);
+  console.log('NavBar', 'props', props)
 
   const router = useRouter();
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [ email, setEmail ] = useState('');
+
+  const [ anchorEl, setAnchorEl ] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const handleLogoClick = async () => {
-    await router.push(`${process.env.NEXT_PUBLIC_DOMAIN}`);
-  }
+  useEffect(() => { if(!isJwtEmptyOrInvalid()){ setEmail(getSessionUserEmail()); } }, []);
 
-  const handleTutorialClick = () => {
-    
-  }; 
+  const handleLogoClick = async () => { await router.push(`${process.env.NEXT_PUBLIC_DOMAIN}`); }
+  const handleTutorialClick = () => { }; 
 
-  const handleTierMeClick = async () => {
+  const handleEstimateClick = async () => {
     if(!isJwtEmptyOrInvalid()) {
       await router.push(`${process.env.NEXT_PUBLIC_DOMAIN}/new-request`);
     }else {
@@ -45,9 +38,13 @@ import { isJwtEmptyOrInvalid } from "../util/jwt-util";
     }
   }; 
 
-  const handleSignInClick = async () => {
-    await router.push(`${process.env.NEXT_PUBLIC_ABAC_HOST}/oauth/google-oauth`);
-  }; 
+  const handleUserClick = (event) => { setAnchorEl(event.currentTarget); }
+  const handleSignInClick = async () => { await router.push(`${process.env.NEXT_PUBLIC_ABAC_HOST}/oauth/google-oauth`); }; 
+
+  const handleUserHomeClick = async () => {
+    setAnchorEl(null);
+    await router.push(`${process.env.NEXT_PUBLIC_DOMAIN}/user-home`);
+  }
 
   const handleSignOutClick = async () => {
     setAnchorEl(null);
@@ -56,22 +53,12 @@ import { isJwtEmptyOrInvalid } from "../util/jwt-util";
     await router.push(`${process.env.NEXT_PUBLIC_DOMAIN}`);
   }; 
 
-  const handleUserClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  }
-
-  const handleUserHomeClick = async () => {
-    setAnchorEl(null);
-    await router.push(`${process.env.NEXT_PUBLIC_DOMAIN}/user-home`);
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const handleClose = () => { setAnchorEl(null); };
 
   const borderlessButtonWithMenu = (icon, text, clickHandler, menu) => {
     return (
       <div 
+        className="borderless-btn-with-menu"
         style={{
           display: "flex",
           flexDirection: "row",
@@ -114,10 +101,9 @@ import { isJwtEmptyOrInvalid } from "../util/jwt-util";
 
         padding: "13px 16px"
       }}>
-        <BadgeIcon sx={{
-          transform: "translateY(-3px)"
-        }}/>
-        <i>&nbsp;&nbsp;User : {email}</i> 
+        <BadgeIcon sx={{ transform: "translateY(-3px)" }}/>
+
+        <i>&nbsp;&nbsp;User : { email }</i> 
       </div>
 
       <MenuItem onClick={ handleUserHomeClick }>
@@ -150,45 +136,35 @@ import { isJwtEmptyOrInvalid } from "../util/jwt-util";
 
   return (
     <div className="home__nav">
-      <div style={{
-        display: "flex",
-        flex: "1"
-      }}>
-        { borderlessButtonWithMenu(<HelpOutlineIcon/>, "Tutorial", handleTutorialClick, null) }
+      <div className="home__nav__left">
+        { borderlessButtonWithMenu(<MilitaryTechIcon/>, "Other Tier", handleTutorialClick, null) }
+
+        <div style={{ margin: "0px 0px 0px 19px"}}>
+          { borderlessButtonWithMenu(<HelpOutlineIcon/>, "Tutorial", handleTutorialClick, null) }
+        </div>
       </div>   
     
-      <div style={{
-        flex: "1",
-        transform: "translateX(19px)"
-      }}>
+      <div className="home__nav__middle">
         <a 
-          style={{ 
-            display: "flex"
-          }} 
+          style={{ display: "flex" }} 
           href="javascript:void(0)"
-          onClick={handleLogoClick}>
+          onClick={ handleLogoClick }>
           <img 
-            src={"https://i.ibb.co/MPCbDnS/cup-fitness-logo.png"} 
+            src={ "https://i.ibb.co/cvfRcZN/cup-tier-logo-2.png" } 
             width="141" height="47"
           />
         </a>
       </div>
 
-      <div style={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-
-        width: "205px"
-      }}>
-        { borderlessButtonWithMenu(<RateReviewIcon/>, "Estimate", handleTierMeClick, null) }
+      <div className="home__nav__right">
+        { borderlessButtonWithMenu(<RateReviewIcon/>, "Estimate", handleEstimateClick, null) }
 
         {
           email
           ?(
             <div style={{ margin: "0px 0px 0px 19px"}}>
-            { borderlessButtonWithMenu(<PersonOutlineIcon/>, "User", handleUserClick, userMenuDropdown) }
-          </div>
+              { borderlessButtonWithMenu(<PersonOutlineIcon/>, "User", handleUserClick, userMenuDropdown) }
+            </div>
           )
           :(
             <div style={{ margin: "0px 0px 0px 19px"}}>

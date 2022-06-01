@@ -1,4 +1,4 @@
-export default function GoogleButton(props: any) {
+const GoogleButton = (props: any) => {
   return (
     <button type="button" className="google-button">
       <span className="google-button__icon">
@@ -13,3 +13,5 @@ export default function GoogleButton(props: any) {
     </button>
   )
 }
+
+export default GoogleButton;

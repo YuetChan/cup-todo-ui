@@ -9,18 +9,13 @@ import { getRequestsByEmail } from "../util/request-report-util";
 
 import Moment from "react-moment";
 
-export default function UserHome() {
+const UserHome = () => {
   const router = useRouter();
 
   const [ requests, setRequests ] = useState([]);
 
-  const handleReadyClick = (id) => {
-    router.push(`${ process.env.NEXT_PUBLIC_DOMAIN }/reports/censored?requestId=${id}`);
-  }
-
-  const handleInProgressClick = (id) => {
-    router.push(`${ process.env.NEXT_PUBLIC_DOMAIN }/requests/${id}`);
-  }
+  const handleReadyClick = (id) => { router.push(`${ process.env.NEXT_PUBLIC_DOMAIN }/reports/censored?requestId=${id}`); }
+  const handleInProgressClick = (id) => { router.push(`${ process.env.NEXT_PUBLIC_DOMAIN }/requests/${id}`); }
 
   useEffect(() => {
     if(!isJwtEmptyOrInvalid()) {
@@ -40,29 +35,15 @@ export default function UserHome() {
     }
   }, []);
 
-  const requestsListItem = (date, id, status) => {
+  const estimationsListItem = (date, id, status) => {
     return (
-      <div style={{
-        display: "flex",
-        flexDirection: "column",
-  
-        padding: "19px",
-        margin: "19px 0px 0px 0px",
-  
-        border: "2px dashed",
-        width: "513px",
-
-        fontSize: "16px",
-        textAlign: "left",
-
-        position: "relative"
-      }}>
+      <div className="user-home__estimations-list-item">
         <div style={{ 
           position: "absolute", 
           right: "11px" 
         }}>
           { 
-            status === 'ready'
+            status === "ready"
             ?  <span>✅</span> 
             : <span>⛏️</span>
           }
@@ -73,7 +54,7 @@ export default function UserHome() {
         <div>
           Estimation :&nbsp;  
           {
-            status === 'ready'
+            status === "ready"
             ? <a 
                 href="javascript:void(0)" 
                 onClick={ () => handleInProgressClick(id) }
@@ -90,7 +71,7 @@ export default function UserHome() {
         </div>
         
         <div>
-          Submitted Date :&nbsp;
+          <span>Submitted Date :&nbsp;</span>
           <Moment format="YYYY/MM/DD">{ date }</Moment>
         </div>
       </div>
@@ -98,69 +79,40 @@ export default function UserHome() {
   }
 
   return (
-    <div>
+    <div className="user-home">
       <NavBar/>
 
-      <div style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        
-        padding: "74px 0px 37px 0px",
-
-        fontSize: "19px",
-        color: "#0B214A"
-      }}>
-        <div style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}>
+      <div className="user-home__content">
+        <div className="user-home__note">
           <div><b>Note</b></div>
         
-          <div style={{
-            margin: "11px 0px 0px 0px",
-            fontSize: "16px",
-          }}>
-            <div>
-            ◾️ ✅ &#8594; Estimation is ready.
-            </div>
-            <div>
-            ◾️ ⛏️ &#8594; Estimation is in progress.
-            </div>
+          <div className="user-home__note__content">
+            <div>◾️ ✅ &#8594; Estimation is ready.</div>
+
+            <div>◾️ ⛏️ &#8594; Estimation is in progress.</div>
           </div>
         </div>
 
-
-
-        <div style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-
-          margin: "37px 0px 0px 0px",
-        }}>
-          <div><b>Estimation Request List</b></div>
+        <div className="user-home__estimation-list">
+          <div><b>Tier Estimation List</b></div>
 
           <div style={{
             margin: "19px 0px 0px 0px",
             padding: "0px 19px 19px 19px",
-
-            height: "calc(100vh - 160px)",
 
             borderTop: "1px solid",
             overflow: "auto",
           }}>
             { 
               requests.map(req => {
-                return requestsListItem(req.createdAt, req.id, req.unlocked? "ready" : "inprogress");
+                return estimationsListItem(req.createdAt, req.id, req.unlocked? "ready" : "inprogress");
               })
             }
           </div>
         </div>  
-
-
       </div>
     </div>
   );
 }
+
+export default UserHome;

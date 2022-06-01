@@ -1,0 +1,47 @@
+.user-home {
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    padding: 74px 0px 37px 0px;
+
+    font-size: 19px;
+    color: #0B214A
+  }
+
+  &__note {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__content {
+      margin: 11px 0px 0px 0px;
+      font-size: 16px
+    }
+  }
+
+  &__estimation-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin: 37px 0px 0px 0px;
+  }
+
+  &__estimations-list-item {
+    display: flex;
+    flex-direction: column;
+
+    padding: 19px;
+    margin: 19px 0px 0px 0px;
+
+    border: 2px dashed;
+    width: 513px;
+
+    font-size: 16px;
+    text-align: left;
+
+    position: relative
+  }
+}

@@ -14,12 +14,44 @@
     background-color: black;
     color: white;
 
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 
-    &__lanuages-menu {
-      border: 3px solid
+    a:hover {
+      color: rgb(128,127,255);
     }
+
+    &__left {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      flex: 1;
+    }
+
+    &__middle {
+      flex: 1;
+      transform: translateX(25px);
+    }
+
+    &__right {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      width: 205px
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 74px 19px 0px 19px;
+
+    color: #0B214A;
+    font-size: 49px;
   }
 }
 
