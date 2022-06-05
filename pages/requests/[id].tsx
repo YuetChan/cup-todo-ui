@@ -47,7 +47,7 @@ const requestById = (props: any) => {
       <NavBar/>
 
       <div className="requests_id__content">
-        <div><b>Tier Estimation Status</b></div>
+        <div><b>Estimation Status</b></div>
         <div style={{
           fontSize: "16px", 
           margin: "11px 0px 0px 0px"

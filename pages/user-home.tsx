@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import NavBar from "../components/nav-bar";
+import QueueGrid from "../components/queue-grid";
 
 import { isJwtEmptyOrInvalid } from "../util/jwt-util";
 import { getSessionUserEmail } from "../util/user-util";
@@ -59,13 +60,13 @@ const UserHome = () => {
                 href="javascript:void(0)" 
                 onClick={ () => handleInProgressClick(id) }
               >
-                <u>Ready</u>
+                <u>View</u>
               </a>
             : <a 
                 href="javascript:void(0)" 
                 onClick={ () => handleInProgressClick(id) }
               >
-                <u>In progress</u>
+                <u>View</u>
               </a>
           } 
         </div>
@@ -80,11 +81,18 @@ const UserHome = () => {
 
   return (
     <div className="user-home">
-      <NavBar/>
+      <NavBar  hightlights={['user']}/>
+
+
 
       <div className="user-home__content">
+        <div className="new-request__attention">
+          <QueueGrid />
+        </div>
+        
+
         <div className="user-home__note">
-          <div><b>Note</b></div>
+          <div><b>Notes</b></div>
         
           <div className="user-home__note__content">
             <div>◾️ ✅ &#8594; Estimation is ready.</div>
@@ -94,14 +102,13 @@ const UserHome = () => {
         </div>
 
         <div className="user-home__estimation-list">
-          <div><b>Tier Estimation List</b></div>
+          <div><b>Estimation List</b></div>
 
           <div style={{
             margin: "19px 0px 0px 0px",
             padding: "0px 19px 19px 19px",
 
             borderTop: "1px solid",
-            overflow: "auto",
           }}>
             { 
               requests.map(req => {

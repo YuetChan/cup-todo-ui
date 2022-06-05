@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 
 import { Button, TextareaAutosize } from "@mui/material";
 
+import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
+
 import NavBar from "../components/nav-bar";
 
 import { getSessionUserEmail, getUserByEmail } from "../util/user-util";
@@ -148,25 +150,34 @@ const NewRequest = (props: any) => {
 
   return (
     <div className="new-request">
-      <NavBar />
+      <NavBar hightlights={['estimate']}/>
 
       <div className="new-request__content">
+        <div className="new-request__attention">
+          <ErrorOutlineOutlinedIcon sx={{ color : "rgb(250,50,50)"}}/>
+          <span style={{
+              display: "inline-flex",
+              alignItems: "center",
+              margin: "0px 0px 0px 5px"
+          }}>Attention : LifeTier has a 14 days submission interval policy.</span> 
+        </div>
+
         <div className="new-request__note">
-          <div><b>Note</b></div>
+          <div><b>Notes</b></div>
         
           <div className="new-request__note__content">
             <div>◾️ Please fill out all FOUR questions.</div>
 
-            <div> ◾️ Please utilize BULLET POINTS for accurate estimation.</div>
+            <div>◾️ Please utilize BULLET POINTS for accurate estimation.</div>
           </div>
         </div>
 
-        {_srcOfIncome}
-        {_skillSet}
-        {_physique}
-        {_bonus}
+        { _srcOfIncome }
+        { _skillSet }
+        { _physique }
+        { _bonus }
         
-        {submitBtn}
+        { submitBtn }
       </div>
     </div>
   )

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { Menu, MenuItem } from "@mui/material";
 
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
-import RateReviewIcon from '@mui/icons-material/RateReview';
+import StairsOutlinedIcon from '@mui/icons-material/StairsOutlined';
 import LoginIcon from '@mui/icons-material/Login';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
@@ -16,7 +16,9 @@ import { getSessionUserEmail } from "../util/user-util";
 import { isJwtEmptyOrInvalid } from "../util/jwt-util";
 
  const NavBar = (props: any) => {
-  console.log('NavBar', 'props', props)
+  console.log('NavBar', 'props', props);
+
+  const { hightlights } = props; 
 
   const router = useRouter();
 
@@ -57,13 +59,6 @@ import { isJwtEmptyOrInvalid } from "../util/jwt-util";
 
   const borderlessButtonWithMenu = (icon, text, clickHandler, menu) => {
     return (
-      <div 
-        className="borderless-btn-with-menu"
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center"
-      }}>
       <a 
         style={{
           display: "flex",
@@ -73,12 +68,21 @@ import { isJwtEmptyOrInvalid } from "../util/jwt-util";
         href='javascript:void(0)'
         onClick={clickHandler}
       >
-        {icon}
-        &nbsp;&nbsp; 
-        {text}
+        <div 
+          className="borderless-btn-with-menu"
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center"
+          }}>
+
+          { icon }
+          &nbsp;&nbsp; 
+          { text }
+  
+          { menu }  
+        </div>
       </a>
-      {menu}  
-    </div>
     )
   }
 
@@ -103,7 +107,7 @@ import { isJwtEmptyOrInvalid } from "../util/jwt-util";
       }}>
         <BadgeIcon sx={{ transform: "translateY(-3px)" }}/>
 
-        <i>&nbsp;&nbsp;User : { email }</i> 
+        <i>&nbsp;&nbsp;<b>User : { email }</b></i> 
       </div>
 
       <MenuItem onClick={ handleUserHomeClick }>
@@ -113,9 +117,7 @@ import { isJwtEmptyOrInvalid } from "../util/jwt-util";
             flexDirection: "row",
             justifyContent: "center",
         }}>
-          <HomeIcon sx={{
-            transform: "translateY(-2px)"
-          }}/>
+          <HomeIcon sx={{ transform: "translateY(-2px)" }}/>
           <span>&nbsp;&nbsp;User Home</span>
         </div>
       </MenuItem>
@@ -137,9 +139,12 @@ import { isJwtEmptyOrInvalid } from "../util/jwt-util";
   return (
     <div className="home__nav">
       <div className="home__nav__left">
-        { borderlessButtonWithMenu(<MilitaryTechIcon/>, "Other Tier", handleTutorialClick, null) }
+        <div className={ hightlights?.includes('other_tier')? 'home__nav__item-highlight home__nav__item' : 'home__nav__item' }>
+          { borderlessButtonWithMenu(<MilitaryTechIcon/>, "Other Tiers", handleTutorialClick, null) }
+        </div>
+        
 
-        <div style={{ margin: "0px 0px 0px 19px"}}>
+        <div className={ hightlights?.includes('tutorial')? 'home__nav__item-highlight home__nav__item' : 'home__nav__item' }>
           { borderlessButtonWithMenu(<HelpOutlineIcon/>, "Tutorial", handleTutorialClick, null) }
         </div>
       </div>   
@@ -150,24 +155,26 @@ import { isJwtEmptyOrInvalid } from "../util/jwt-util";
           href="javascript:void(0)"
           onClick={ handleLogoClick }>
           <img 
-            src={ "https://i.ibb.co/cvfRcZN/cup-tier-logo-2.png" } 
+            src={ "https://i.ibb.co/pzQr3jq/cup-tier-logo-8.png" } 
             width="141" height="47"
           />
         </a>
       </div>
 
       <div className="home__nav__right">
-        { borderlessButtonWithMenu(<RateReviewIcon/>, "Estimate", handleEstimateClick, null) }
-
+        <div className={ hightlights?.includes('estimate')? 'home__nav__item-highlight home__nav__item' : 'home__nav__item' }>
+          { borderlessButtonWithMenu(<StairsOutlinedIcon/>, "Estimate", handleEstimateClick, null) }
+        </div>
+        
         {
           email
           ?(
-            <div style={{ margin: "0px 0px 0px 19px"}}>
+            <div className={ hightlights?.includes('user')? 'home__nav__item-highlight home__nav__item' : 'home__nav__item' }>
               { borderlessButtonWithMenu(<PersonOutlineIcon/>, "User", handleUserClick, userMenuDropdown) }
             </div>
           )
           :(
-            <div style={{ margin: "0px 0px 0px 19px"}}>
+            <div className="home__nav__item">
               { borderlessButtonWithMenu(<LoginIcon/>, "Sign In", handleSignInClick, null) }
             </div>
           )

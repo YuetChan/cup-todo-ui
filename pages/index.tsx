@@ -30,7 +30,7 @@ const Home = () => {
       </Head>
 
       <main className={ styles.main }>
-        <NavBar/>
+        <NavBar />
 
         <div className='home__content'>
           <b>Let us estimate your tier !</b>
