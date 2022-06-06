@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import { Menu, MenuItem } from "@mui/material";
+import { Menu, MenuItem, Tooltip } from "@mui/material";
 
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import StairsOutlinedIcon from '@mui/icons-material/StairsOutlined';
@@ -27,7 +27,11 @@ import { isJwtEmptyOrInvalid } from "../util/jwt-util";
   const [ anchorEl, setAnchorEl ] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  useEffect(() => { if(!isJwtEmptyOrInvalid()){ setEmail(getSessionUserEmail()); } }, []);
+  useEffect(() => { 
+    if(!isJwtEmptyOrInvalid()){ setEmail(getSessionUserEmail()); } 
+
+    handleClose()
+  }, []);
 
   const handleLogoClick = async () => { await router.push(`${process.env.NEXT_PUBLIC_DOMAIN}`); }
   const handleTutorialClick = () => { }; 
@@ -40,7 +44,7 @@ import { isJwtEmptyOrInvalid } from "../util/jwt-util";
     }
   }; 
 
-  const handleUserClick = (event) => { setAnchorEl(event.currentTarget); }
+  const handleUserClick = (event : React.MouseEvent<HTMLButtonElement>) => { setAnchorEl(event.currentTarget); }
   const handleSignInClick = async () => { await router.push(`${process.env.NEXT_PUBLIC_ABAC_HOST}/oauth/google-oauth`); }; 
 
   const handleUserHomeClick = async () => {
@@ -57,7 +61,7 @@ import { isJwtEmptyOrInvalid } from "../util/jwt-util";
 
   const handleClose = () => { setAnchorEl(null); };
 
-  const borderlessButtonWithMenu = (icon, text, clickHandler, menu) => {
+  const navBarMenuButton = (icon, text, clickHandler) => {
     return (
       <a 
         style={{
@@ -66,7 +70,7 @@ import { isJwtEmptyOrInvalid } from "../util/jwt-util";
           alignItems: "center"
         }} 
         href='javascript:void(0)'
-        onClick={clickHandler}
+        onClick={ clickHandler }
       >
         <div 
           className="borderless-btn-with-menu"
@@ -75,12 +79,10 @@ import { isJwtEmptyOrInvalid } from "../util/jwt-util";
             flexDirection: "row",
             alignItems: "center"
           }}>
-
+            
           { icon }
           &nbsp;&nbsp; 
           { text }
-  
-          { menu }  
         </div>
       </a>
     )
@@ -90,7 +92,7 @@ import { isJwtEmptyOrInvalid } from "../util/jwt-util";
     <Menu
       id="basic-menu"
       anchorEl={ anchorEl }
-      open={ open }
+      open={ Boolean(anchorEl) }
       onClose={ handleClose }
       MenuListProps={{ 'aria-labelledby': 'basic-button' }}
       style={{
@@ -140,12 +142,15 @@ import { isJwtEmptyOrInvalid } from "../util/jwt-util";
     <div className="home__nav">
       <div className="home__nav__left">
         <div className={ hightlights?.includes('other_tier')? 'home__nav__item-highlight home__nav__item' : 'home__nav__item' }>
-          { borderlessButtonWithMenu(<MilitaryTechIcon/>, "Other Tiers", handleTutorialClick, null) }
+          <Tooltip title={ "Coming Soon !" }>
+            { navBarMenuButton(<MilitaryTechIcon/>, "Other Tiers", handleTutorialClick) }
+          </Tooltip>
         </div>
         
-
         <div className={ hightlights?.includes('tutorial')? 'home__nav__item-highlight home__nav__item' : 'home__nav__item' }>
-          { borderlessButtonWithMenu(<HelpOutlineIcon/>, "Tutorial", handleTutorialClick, null) }
+          <Tooltip title={ "Coming Soon !" }>
+            { navBarMenuButton(<HelpOutlineIcon/>, "Tutorial", handleTutorialClick) }
+          </Tooltip>
         </div>
       </div>   
     
@@ -163,19 +168,20 @@ import { isJwtEmptyOrInvalid } from "../util/jwt-util";
 
       <div className="home__nav__right">
         <div className={ hightlights?.includes('estimate')? 'home__nav__item-highlight home__nav__item' : 'home__nav__item' }>
-          { borderlessButtonWithMenu(<StairsOutlinedIcon/>, "Estimate", handleEstimateClick, null) }
+          { navBarMenuButton(<StairsOutlinedIcon/>, "Estimate", handleEstimateClick) }
         </div>
         
         {
           email
           ?(
             <div className={ hightlights?.includes('user')? 'home__nav__item-highlight home__nav__item' : 'home__nav__item' }>
-              { borderlessButtonWithMenu(<PersonOutlineIcon/>, "User", handleUserClick, userMenuDropdown) }
+              { navBarMenuButton(<PersonOutlineIcon/>, "User", handleUserClick) }
+              { userMenuDropdown }
             </div>
           )
           :(
             <div className="home__nav__item">
-              { borderlessButtonWithMenu(<LoginIcon/>, "Sign In", handleSignInClick, null) }
+              { navBarMenuButton(<LoginIcon/>, "SignIn", handleSignInClick) }
             </div>
           )
         }

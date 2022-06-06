@@ -12,6 +12,16 @@ const getRequestById = async (id) => {
   })
 }
 
+const getLastUnestimatedRequest = async () => {
+  return await axios.get(`${process.env.NEXT_PUBLIC_REST_HOST}/requests/lastUnestimated`).then(res => {
+    if(res.status === 200) {
+      return res.data.data.request;
+    }else {
+      throw new Error('Unknown error');
+    } 
+  })
+}
+
 const getRequestsByEmail = (email) => {
   return axios.get(`${process.env.NEXT_PUBLIC_REST_HOST}/requests/users?email=${email}`).then(res => {
     console.log(res.data.data.requests);
@@ -41,8 +51,8 @@ const submitRequest = async (json) => {
   });
 }
 
-const getCensoredReportById = async (id) => {
-  return await axios.get(`${process.env.NEXT_PUBLIC_REST_HOST}/reports/${id}/censored`).then(res => {
+const getCensoredReportByRequestId = async (id) => {
+  return await axios.get(`${process.env.NEXT_PUBLIC_REST_HOST}/reports/censored?requestId=${id}`).then(res => {
     if(res.status === 200) {
       return res.data.data.report;
     }else {
@@ -51,4 +61,4 @@ const getCensoredReportById = async (id) => {
   })
 }
 
-export { getRequestById, getRequestsByEmail, submitRequest, getCensoredReportById }
+export { getRequestById, getLastUnestimatedRequest, getRequestsByEmail, submitRequest, getCensoredReportByRequestId }

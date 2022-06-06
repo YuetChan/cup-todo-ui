@@ -6,7 +6,7 @@ import QueueGrid from "../components/queue-grid";
 
 import { isJwtEmptyOrInvalid } from "../util/jwt-util";
 import { getSessionUserEmail } from "../util/user-util";
-import { getRequestsByEmail } from "../util/request-report-util";
+import { getLastUnestimatedRequest, getRequestById, getRequestsByEmail } from "../util/request-report-util";
 
 import Moment from "react-moment";
 
@@ -15,19 +15,45 @@ const UserHome = () => {
 
   const [ requests, setRequests ] = useState([]);
 
+  const [ userLastRequest, setUserLastRequest ] = useState();
+  const [ lastEstimatedRequest, setLastEstimatedRequest ] = useState();
+
   const handleReadyClick = (id) => { router.push(`${ process.env.NEXT_PUBLIC_DOMAIN }/reports/censored?requestId=${id}`); }
   const handleInProgressClick = (id) => { router.push(`${ process.env.NEXT_PUBLIC_DOMAIN }/requests/${id}`); }
 
   useEffect(() => {
     if(!isJwtEmptyOrInvalid()) {
+      getLastUnestimatedRequest().then(res => {
+        console.log(res);
+        setLastEstimatedRequest(res);
+      }).catch(err => {
+        console.log(err);
+      })
+
       getRequestsByEmail(getSessionUserEmail()).then(res => {
         if(res.length > 0) {
           setRequests(res);
+
+          let latestRequest = null;
+          res.forEach(request => {
+            if(latestRequest === null) {
+              latestRequest = request;
+            }else {
+              latestRequest = latestRequest.createdAt >= request ? latestRequest : request; 
+            }
+          });
+
+          getRequestById(latestRequest.id).then(res => {
+            console.log(res)
+            setUserLastRequest(res);
+          })
         }else {
           alert("Opps, you dont have any esitmation request.")
           router.push(`${ process.env.NEXT_PUBLIC_DOMAIN }/new-request`);
         }
       }).catch(err => {
+        console.log(err);
+
         alert("Opps. Something is wrong.");
         router.push(`${ process.env.NEXT_PUBLIC_DOMAIN }`);
       });
@@ -81,13 +107,14 @@ const UserHome = () => {
 
   return (
     <div className="user-home">
-      <NavBar  hightlights={['user']}/>
-
-
+      <NavBar hightlights={['user']}/>
 
       <div className="user-home__content">
         <div className="new-request__attention">
-          <QueueGrid />
+          <QueueGrid 
+            userRequest={ userLastRequest }
+            lastEstimatedRequest={ lastEstimatedRequest }
+          />
         </div>
         
 
@@ -102,7 +129,7 @@ const UserHome = () => {
         </div>
 
         <div className="user-home__estimation-list">
-          <div><b>Estimation List</b></div>
+          <div><b>Estimations List</b></div>
 
           <div style={{
             margin: "19px 0px 0px 0px",
